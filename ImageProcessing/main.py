@@ -3,7 +3,6 @@ import pickle
 import cvzone
 import numpy as np
 import time
-import climage
 from setup import *
 
 

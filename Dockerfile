@@ -1,23 +1,34 @@
-FROM alpine:latest
+# Use a more standard Python image
+FROM python:3.10-slim
 
-# Install dependencies
-RUN apk update && apk add --no-cache \
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
-    python3 \
-    py3-pip \
-    make
+    make \
+    bash \
+    libffi-dev \
+    libssl-dev \
+    python3-dev \
+    build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
+# Set the working directory
 WORKDIR /app
 
-# Copy code
+# Copy application code and script into the container
 COPY . /app
 
-# Install Python packages
-RUN pip3 install -r requirements.txt
+# Upgrade pip and install Python packages globally
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Expose port
+# Make the script executable
+RUN chmod +x /app/start.sh
+
+# Expose the port that your server will run on
 EXPOSE 7703
 
-RUN chmod +x /app/start.sh
-RUN /app/start.sh
+# Run the start script
+CMD ["/app/start.sh"]

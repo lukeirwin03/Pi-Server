@@ -19,9 +19,9 @@ if [ $? -eq 0 ]; then
 
     # Define a cleanup function
     cleanup() {
-        echo "Shutting down the server..."
-        kill -SIGINT "$server_pid"
-        wait "$server_pid"
+        echo "Shutting down the server with PID: $server_pid..."
+        kill -SIGINT "$server_pid" || kill -9 "$server_pid"
+        wait "$server_pid" 2>/dev/null
         echo "Server has been shut down."
         exit 0
     }
@@ -33,5 +33,5 @@ if [ $? -eq 0 ]; then
     wait "$server_pid"
 else
     echo "Compilation failed."
-    echo "Shutting down..."
+    echo "Shutting down."
 fi
