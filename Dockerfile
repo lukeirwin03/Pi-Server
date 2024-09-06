@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     python3-dev \
     build-essential \
+    curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -22,9 +23,9 @@ COPY . /app
 
 # Upgrade pip and install Python packages globally
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install cvzone numpy opencv-python
 
-# Make the script executable
+# Make the scripts executable
 RUN chmod +x /app/start.sh
 
 # Expose the port that your server will run on

@@ -108,24 +108,18 @@ int main(int argc, char *argv[])
 
 char *runScript()
 {
-    char *buffer = malloc(1024); // Dynamically allocate memory
-    if (!buffer)
-    {
-        perror("malloc");
-        return NULL;
-    }
+    char buffer[1024 * 5]; // Buffer to store the output : 5 KB
 
     FILE *pipe = popen("python3 ./ImageProcessing/main.py", "r");
     if (!pipe)
     {
         perror("popen");
-        free(buffer); // Free allocated memory before returning NULL
         return NULL;
     }
 
-    fgets(buffer, 1024 * 50, pipe); // Read into the allocated buffer
+    fgets(buffer, sizeof(buffer), pipe);
 
     pclose(pipe);
 
-    return buffer;
+    return strdup(buffer);
 }
